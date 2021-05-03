@@ -7,4 +7,3 @@ docker-compose start
 docker exec -it namenode bash
 
 docker-compose stop
-
