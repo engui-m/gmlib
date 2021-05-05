@@ -25,6 +25,7 @@ docker exec -it database bash
 
 mysql -h localhost -uroot -psecret
 
+
 docker exec -it namenode bash
 
 sqoop eval \

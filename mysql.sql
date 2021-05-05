@@ -1,4 +1,4 @@
-SELECT * FROM employees.titles limit 15
+SELECT * FROM employees.titles limit 15;
 -- +--------+--------------------+------------+------------+
 -- | emp_no | title              | from_date  | to_date    |
 -- +--------+--------------------+------------+------------+
@@ -18,3 +18,33 @@ SELECT * FROM employees.titles limit 15
 -- |  10009 | Senior Engineer    | 1995-02-18 | 9999-01-01 |
 -- |  10010 | Engineer           | 1996-11-24 | 9999-01-01 |
 -- +--------+--------------------+------------+------------+
+
+DROP TABLE IF EXISTS cp_titles_date; CREATE TABLE cp_titles_date AS SELECT title, to_date FROM titles;
+-- Query OK, 443308 rows affected (3.17 sec)
+-- Records: 443308  Duplicates: 0  Warnings: 0
+
+SELECT * FROM cp_titles_date limit 15;
+-- +--------------------+------------+
+-- | title              | to_date    |
+-- +--------------------+------------+
+-- | Senior Engineer    | 9999-01-01 |
+-- | Staff              | 9999-01-01 |
+-- | Senior Engineer    | 9999-01-01 |
+-- | Engineer           | 1995-12-01 |
+-- | Senior Engineer    | 9999-01-01 |
+-- | Senior Staff       | 9999-01-01 |
+-- | Staff              | 1996-09-12 |
+-- | Senior Engineer    | 9999-01-01 |
+-- | Senior Staff       | 9999-01-01 |
+-- | Staff              | 1996-02-11 |
+-- | Assistant Engineer | 2000-07-31 |
+-- | Assistant Engineer | 1990-02-18 |
+-- | Engineer           | 1995-02-18 |
+-- | Senior Engineer    | 9999-01-01 |
+-- | Engineer           | 9999-01-01 |
+-- +--------------------+------------+
+-- 15 rows in set (0.00 sec)
+
+UPDATE cp_titles_date SET to_date = NULL WHERE title = 'Staff';
+-- Query OK, 107391 rows affected (1.12 sec)
+-- Rows matched: 107391  Changed: 107391  Warnings: 0
