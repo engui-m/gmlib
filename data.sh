@@ -276,3 +276,14 @@ hdfs dfs -ls -h -R /user/hive/warehouse/db_format_parquet_lz4
 # drwxr-xr-x   - root supergroup          0 2021-05-06 22:12 /user/hive/warehouse/db_format_parquet_lz4/employees/.signals
 # -rw-r--r--   3 root supergroup          0 2021-05-06 22:12 /user/hive/warehouse/db_format_parquet_lz4/employees/.signals/unbounded
 # -rw-r--r--   3 root supergroup      3.0 M 2021-05-06 22:12 /user/hive/warehouse/db_format_parquet_lz4/employees/ed99685d-e7f4-4cb0-b967-32f6d8ab2975.parquet
+
+
+
+sqoop import --table cp_rental_append --connect jdbc:mysql://database/sakila --username root --password secret --warehouse-dir /user/hive/warehouse/db_test3 -m 1 -delete-target-dir
+
+sqoop import --table cp_rental_id --connect jdbc:mysql://database/sakila --username root --password secret --warehouse-dir /user/hive/warehouse/db_test3 -m 1 -delete-target-dir
+
+sqoop import --table cp_rental_date --connect jdbc:mysql://database/sakila --username root --password secret --warehouse-dir /user/hive/warehouse/db_test3 -m 1 -delete-target-dir
+
+
+

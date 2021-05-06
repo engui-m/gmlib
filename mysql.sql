@@ -48,3 +48,9 @@ SELECT * FROM cp_titles_date limit 15;
 UPDATE cp_titles_date SET to_date = NULL WHERE title = 'Staff';
 -- Query OK, 107391 rows affected (1.12 sec)
 -- Rows matched: 107391  Changed: 107391  Warnings: 0
+
+DROP TABLE IF EXISTS cp_rental_append; CREATE TABLE cp_rental_append AS SELECT rental_id, rental_date FROM rental;
+
+DROP TABLE IF EXISTS cp_rental_id; CREATE TABLE cp_rental_id AS SELECT rental_id, rental_date FROM cp_rental_append;
+
+DROP TABLE IF EXISTS cp_rental_date; CREATE TABLE cp_rental_date AS SELECT rental_id, rental_date FROM cp_rental_append;
