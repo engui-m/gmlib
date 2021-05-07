@@ -314,3 +314,26 @@ sqoop eval --connect jdbc:mysql://database/sakila --username root --password sec
 sqoop import --connect jdbc:mysql://database/sakila --username root --password secret --warehouse-dir /user/hive/warehouse/db_test3 --incremental append --check-column rental_id --last-value 16049 --table cp_rental_id -m 1
 
 sqoop import --connect jdbc:mysql://database/sakila --username root --password secret --warehouse-dir /user/hive/warehouse/db_test3 --incremental lastmodified --merge-key rental_id --check-column rental_date --last-value '2005-08-23 22:50:12.0' --table cp_rental_date -m 1
+
+hdfs dfs -ls -h -R /user/hive/warehouse/db_test3
+# drwxr-xr-x   - root supergroup          0 2021-05-07 21:42 /user/hive/warehouse/db_test3/cp_rental_append
+# -rw-r--r--   3 root supergroup          0 2021-05-07 21:14 /user/hive/warehouse/db_test3/cp_rental_append/_SUCCESS
+# -rw-r--r--   3 root supergroup    427.9 K 2021-05-07 21:14 /user/hive/warehouse/db_test3/cp_rental_append/part-m-00000
+# -rw-r--r--   3 root supergroup    427.9 K 2021-05-07 21:42 /user/hive/warehouse/db_test3/cp_rental_append/part-m-00001
+# drwxr-xr-x   - root supergroup          0 2021-05-07 22:12 /user/hive/warehouse/db_test3/cp_rental_date
+# -rw-r--r--   3 root supergroup          0 2021-05-07 22:12 /user/hive/warehouse/db_test3/cp_rental_date/_SUCCESS
+# -rw-r--r--   3 root supergroup    428.0 K 2021-05-07 22:12 /user/hive/warehouse/db_test3/cp_rental_date/part-r-00000
+# drwxr-xr-x   - root supergroup          0 2021-05-07 21:52 /user/hive/warehouse/db_test3/cp_rental_id
+# -rw-r--r--   3 root supergroup          0 2021-05-07 21:17 /user/hive/warehouse/db_test3/cp_rental_id/_SUCCESS
+# -rw-r--r--   3 root supergroup    427.9 K 2021-05-07 21:17 /user/hive/warehouse/db_test3/cp_rental_id/part-m-00000
+# -rw-r--r--   3 root supergroup        168 2021-05-07 21:52 /user/hive/warehouse/db_test3/cp_rental_id/part-m-00001
+
+
+sqoop import -m 1 -delete-target-dir --connect jdbc:mysql://database/employees --username root --password secret --table titles --warehouse-dir /user/aluno/guimmox/data
+
+sqoop import -m 1 -delete-target-dir --connect jdbc:mysql://database/employees --username root --password secret --table titles --hive-import --hive-table guimmox.titles
+
+sqoop eval --connect jdbc:mysql://database/employees --username=root --password=secret --query "truncate table titles"
+
+sqoop export --connect jdbc:mysql://database/employees --username root --password secret --table titles --export-dir /user/aluno/guimmox/data/titles
+
