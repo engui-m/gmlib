@@ -49,8 +49,72 @@ UPDATE cp_titles_date SET to_date = NULL WHERE title = 'Staff';
 -- Query OK, 107391 rows affected (1.12 sec)
 -- Rows matched: 107391  Changed: 107391  Warnings: 0
 
-DROP TABLE IF EXISTS cp_rental_append; CREATE TABLE cp_rental_append AS SELECT rental_id, rental_date FROM rental;
+DROP TABLE IF EXISTS cp_rental_append; CREATE TABLE cp_rental_append SELECT rental_id, rental_date FROM rental;
+select * from cp_rental_append limit 5;
+-- +-----------+---------------------+
+-- | rental_id | rental_date         |
+-- +-----------+---------------------+
+-- |         1 | 2005-05-24 22:53:30 |
+-- |         2 | 2005-05-24 22:54:33 |
+-- |         3 | 2005-05-24 23:03:39 |
+-- |         4 | 2005-05-24 23:04:41 |
+-- |         5 | 2005-05-24 23:05:21 |
+-- +-----------+---------------------+
+-- 5 rows in set (0.00 sec)
+
 
 DROP TABLE IF EXISTS cp_rental_id; CREATE TABLE cp_rental_id AS SELECT rental_id, rental_date FROM cp_rental_append;
+-- select * from cp_rental_id limit 5;
+-- +-----------+---------------------+
+-- | rental_id | rental_date         |
+-- +-----------+---------------------+
+-- |         1 | 2005-05-24 22:53:30 |
+-- |         2 | 2005-05-24 22:54:33 |
+-- |         3 | 2005-05-24 23:03:39 |
+-- |         4 | 2005-05-24 23:04:41 |
+-- |         5 | 2005-05-24 23:05:21 |
+-- +-----------+---------------------+
+-- 5 rows in set (0.00 sec)
 
 DROP TABLE IF EXISTS cp_rental_date; CREATE TABLE cp_rental_date AS SELECT rental_id, rental_date FROM cp_rental_append;
+-- select * from cp_rental_date limit 5;
+-- +-----------+---------------------+
+-- | rental_id | rental_date         |
+-- +-----------+---------------------+
+-- |         1 | 2005-05-24 22:53:30 |
+-- |         2 | 2005-05-24 22:54:33 |
+-- |         3 | 2005-05-24 23:03:39 |
+-- |         4 | 2005-05-24 23:04:41 |
+-- |         5 | 2005-05-24 23:05:21 |
+-- +-----------+---------------------+
+-- 5 rows in set (0.00 sec)
+
+--insert_rental.sql
+use sakila;
+DROP TABLE IF EXISTS cp_rental_append, cp_rental_date, cp_rental_id;
+create table cp_rental_append select rental_id, rental_date from rental;
+create table cp_rental_date select * from cp_rental_append;
+create table cp_rental_id select * from cp_rental_date;
+
+insert into cp_rental_date values(16048,'2005-08-23 22:30:00');
+insert into cp_rental_date values(16049,'2005-08-23 22:40:00');
+insert into cp_rental_date values(16050,'2005-08-23 22:52:50');
+insert into cp_rental_date values(16051,'2005-08-23 22:54:30');
+insert into cp_rental_date values(16052,'2005-08-23 22:55:20');
+insert into cp_rental_date values(16054,'2005-08-23 22:57:40');
+insert into cp_rental_date values(16053,'2005-08-23 22:56:10');
+insert into cp_rental_date values(16055,'2005-08-23 22:59:20');
+
+insert into cp_rental_id values(16048,'2005-08-23 22:30:00');
+insert into cp_rental_id values(16049,'2005-08-23 22:40:00');
+insert into cp_rental_id values(16050,'2005-08-23 22:52:50');
+insert into cp_rental_id values(16051,'2005-08-23 22:54:30');
+insert into cp_rental_id values(16052,'2005-08-23 22:55:20');
+insert into cp_rental_id values(16054,'2005-08-23 22:57:40');
+insert into cp_rental_id values(16053,'2005-08-23 22:56:10');
+insert into cp_rental_id values(16055,'2005-08-23 22:59:20');
+
+select * from cp_rental_date ORDER By rental_date DESC limit 10;
+
+select * from cp_rental_id ORDER By rental_id DESC limit 10;
+--end insert_rental.sql
