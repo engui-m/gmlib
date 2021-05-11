@@ -13,7 +13,7 @@ hdfs dfs -ls /
 
 hdfs dfs -ls -R -h /user/hive/warehouse/
 
-hdfs dfs -put -h
+hdfs dfs -put 
 
 
 docker exec -it hive-server bash
@@ -337,3 +337,84 @@ sqoop eval --connect jdbc:mysql://database/employees --username=root --password=
 
 sqoop export --connect jdbc:mysql://database/employees --username root --password secret --table titles --export-dir /user/aluno/guimmox/data/titles
 
+
+hbase shell
+
+create 'controle', 'produto', 'fornecedor'
+create 'controle', {NAME='produto'},{NAME=>'fornecedor'}
+
+put 'controle', '1', 'produto:nome', 'ram'
+put 'controle', '1', 'produto:qtd', '100'
+
+put 'controle', '2', 'produto:nome', 'hd'
+put 'controle', '2', 'produto:qtd', '50'
+
+put 'controle', '3', 'produto:nome', 'mouse'
+put 'controle', '3', 'produto:qtd', '150'
+
+
+put 'controle', '1', 'fornecedor:nome', 'TI Comp'
+put 'controle', '1', 'fornecedor:estado', 'SP'
+
+put 'controle', '2', 'fornecedor:nome', 'Peças PC'
+put 'controle', '2', 'fornecedor:estado', 'MG'
+
+put 'controle', '3', 'fornecedor:nome', 'Inf Tec'
+put 'controle', '3', 'fornecedor:estado', 'SP'
+
+list
+describe 'controle'
+count 'controle'
+
+scan 'controle', {LIMIT => 15}
+
+alter 'controle', {NAME=>'produto', VERSIONS=>3}
+
+put 'controle', '2', 'produto:qtd', '200'
+
+get 'controle', '2', {COLUMNS=>['produto:qtd'], VERSIONS=>3}
+
+scan 'controle', {COLUMNS=>'fornecedor:estado', FILTER => "ValueFilter(=, 'binary:SP')"}
+
+deleteall 'controle', '1'
+deleteall 'controle', '3'
+
+delete 'controle', '2', 'fornecedor:estado'
+
+scan 'controle'
+
+
+curl -O https://repo1.maven.org/maven2/com/twitter/parquet-hadoop-bundle/1.6.0/parquet-hadoop-bundle-1.6.0.jar
+docker cp parquet-hadoop-bundle-1.6.0.jar spark:/opt/spark/jars
+
+
+hdfs dfs -ls /input/exercises-data/juros_selic
+hdfs dfs -cp /input/exercises-data/juros_selic /user/aluno/guimmox/data
+
+val jurosDF = spark.read.json("/user/aluno/guimmox/data/juros_selic/juros_selic.json")
+
+jurosDF.printSchema()
+
+jurosDF.show(5)
+
+jurosDF.count()
+
+val jurosDF10 = jurosDF.where("valor > 10")
+
+jurosDF10.write.saveAsTable(guimmox.tab_juros_selic)
+
+val jurosHiveDF = spark.read.table(guimmox.tab_juros_selic)
+
+jurosHiveDF.printSchema()
+
+jurosHiveDF.show(5)
+
+jurosHiveDF.write.option("path","/user/aluno/guimmox/data/save_juros").save("juros_selicParquet")
+
+hdfs dfs -ls /user/aluno/nome/data/save_juros
+
+val jurosHDFS = spark.read.load("/user/aluno/guimmox/data/save_juros/")
+
+jurosHDFS.printSchema()
+
+jurosHDFS.show(5)
