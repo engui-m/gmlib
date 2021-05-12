@@ -388,33 +388,62 @@ curl -O https://repo1.maven.org/maven2/com/twitter/parquet-hadoop-bundle/1.6.0/p
 docker cp parquet-hadoop-bundle-1.6.0.jar spark:/opt/spark/jars
 
 
-hdfs dfs -ls /input/exercises-data/juros_selic
-hdfs dfs -cp /input/exercises-data/juros_selic /user/aluno/guimmox/data
+hdfs dfs -put /input/exercises-data/juros_selic/ /user/aluno/guimmox/data
+hdfs dfs -ls /user/aluno/guimmox/data/
+
+spark-shell
 
 val jurosDF = spark.read.json("/user/aluno/guimmox/data/juros_selic/juros_selic.json")
 
 jurosDF.printSchema()
 
 jurosDF.show(5)
+jurosDF.show(5,false)
 
 jurosDF.count()
 
 val jurosDF10 = jurosDF.where("valor > 10")
 
-jurosDF10.write.saveAsTable(guimmox.tab_juros_selic)
+jurosDF10.write.saveAsTable("guimmox.tab_juros_selic")
 
-val jurosHiveDF = spark.read.table(guimmox.tab_juros_selic)
+val jurosHiveDF = spark.read.table("guimmox.tab_juros_selic")
 
 jurosHiveDF.printSchema()
 
 jurosHiveDF.show(5)
 
 jurosHiveDF.write.option("path","/user/aluno/guimmox/data/save_juros").save("juros_selicParquet")
+jurosHiveDF.write.save("/user/aluno/guimmox/data/save_juros")
 
-hdfs dfs -ls /user/aluno/nome/data/save_juros
+hdfs dfs -ls /user/aluno/guimmox/data/save_juros
 
 val jurosHDFS = spark.read.load("/user/aluno/guimmox/data/save_juros/")
 
 jurosHDFS.printSchema()
 
 jurosHDFS.show(5)
+
+
+val alunosDF = spark.read.csv("/user/aluno/guimmox/data/escola/alunos.csv")
+
+alunosDF.printSchema()
+alunosDF.show(5)
+
+val alunosDF = spark.read.option("header","true").csv("/user/aluno/guimmox/data/escola/alunos.csv")
+
+alunosDF.printSchema()
+alunosDF.show(5)
+
+val alunosDF = spark.read.option("inferSchema","true").option("header","true").csv("/user/aluno/guimmox/data/escola/alunos.csv")
+
+alunosDF.printSchema()
+alunosDF.show(5)
+
+alunosDF.write.saveAsTable("guimmox.tab_alunos")
+
+val cursosDF = spark.read.option("inferSchema","true").option("header","true").csv("/user/aluno/guimmox/data/escola/cursos.csv")
+
+val alunos_cursosDF = alunosDF.join(cursosDF, "id_curso")
+alunos_cursosDF.show(5)
+alunos_cursosDF.printSchema()
+alunos_cursosDF.count()
