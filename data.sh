@@ -447,3 +447,37 @@ val alunos_cursosDF = alunosDF.join(cursosDF, "id_curso")
 alunos_cursosDF.show(5)
 alunos_cursosDF.printSchema()
 alunos_cursosDF.count()
+
+
+spark.catalog.listDatabases.show()
+
+spark.catalog.setCurrentDatabase("guimmox")
+
+spark.catalog.listTables.show()
+
+spark.catalog.listColumns("tab_alunos").show
+
+spark.sql("select * from tab_alunos").show(10)
+
+
+spark.sql("select id_discente, nome from tab_alunos limit 5").show(false)
+val alunosHiveDF = spark.read.table("tab_alunos")
+alunosHiveDF.select("id_discente", "nome").limit(5).show(false)
+
+spark.sql("select id_discente, nome, ano_ingresso from tab_alunos where ano_ingresso>= 2018").show(false)
+alunosHiveDF.select("id_discente", "nome", "ano_ingresso").where("ano_ingresso>= 2018").show(false)
+
+spark.sql("select id_discente, nome, ano_ingresso from tab_alunos where ano_ingresso>= 2018 order by nome desc").show(false)
+alunosHiveDF.where("ano_ingresso>= 2018").orderBy($"nome".desc).show(false)
+alunosHiveDF.where("ano_ingresso>= 2018").orderBy(desc("nome")).show(false)
+
+spark.sql("select id_discente, nome, ano_ingresso from tab_alunos where ano_ingresso>= 2018 order by nome desc").count()
+spark.sql("select count(*) from tab_alunos where ano_ingresso>= 2018").show(false)
+alunosHiveDF.where("ano_ingresso>= 2018").count()
+
+
+
+
+hdfs dfs -put /input/exercises-data/teste /user/aluno/guimmox/data/teste
+
+val testeDF = spark.read.option("inferSchema","true").csv("/user/aluno/guimmox/data/teste")
