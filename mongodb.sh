@@ -46,3 +46,30 @@ db.produto.find().pretty()
   db.produto.find( { $or : [ {'descricao.conexao' : "USB"}, {qtd : {$lt : 25} } ] }, {_id: 1} )  
 
 
+show collections
+db.produto.find().pretty()
+
+ db.produto.updateOne( {_id: 1}, {$set: {nome: "cpu i7"}} )
+
+ db.produto.updateOne( {_id: 1}, {$set: {qtd: 15}} )
+
+ db.produto.updateMany({qtd: {$gte: 30}}, {$set: {qtd: 30}})
+
+ db.produto.updateMany({}, {$rename: {"descricao.so": "descricao.sistema"}})
+
+ db.produto.updateMany({"descricao.conexao": "USB"}, {$set: {"descricao.conexao": "USB 2.0"}})
+
+ db.produto.updateMany({"descricao.conexao": "USB 2.0"}, {$set: {"descricao.conexao": "USB 3.0"}, $currentDate:{data_modificacao:{$type:"date"}}})
+  db.produto.updateMany({"descricao.conexao": "USB 2.0"}, {$set: {"descricao.conexao": "USB 3.0", data_modificacao: new Date()}})
+
+ db.produto.updateOne({_id: 3, "descricao.sistema": "Windows"}, {$set: {"descricao.sistema.$": "Windows 10"}})
+
+ db.produto.updateOne({_id: 4}, {$push: {"descricao.sistema": "Linux"}})
+
+ db.produto.updateOne({_id: 3}, {$pull: {"descricao.sistema": "Mac"}, $currentDate:{ts_modificacao:{$type:"timestamp"}}})
+
+
+
+ 
+ 
+
