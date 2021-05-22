@@ -30,5 +30,19 @@ db.produto.find().pretty()
 
   db.produto.find( { "descricao.so" : { $in : ["Windows","Windows 10"] } } )
 
+
+db.produto.find().pretty()
   
+  db.produto.find().sort( {nome : 1} )
+  
+  db.produto.find().sort( {nome : 1}, {qtd : 1} ).limit(3)
+  
+  db.produto.findOne({ 'descricao.conexao' : "USB" })
+
+  db.produto.find( { 'descricao.conexao' : "USB", qtd : {$lt : 25} } )
+
+  db.produto.find( { $or : [ {'descricao.conexao' : "USB"}, {qtd : {$lt : 25} } ] } )
+
+  db.produto.find( { $or : [ {'descricao.conexao' : "USB"}, {qtd : {$lt : 25} } ] }, {_id: 1} )  
+
 
