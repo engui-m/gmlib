@@ -88,4 +88,24 @@ show collections
  db.teste.drop()
  
  
+db.produto.createIndex({nome: 1}, {name: "query_produto"})
+ db.produto.getIndexes()
 
+ db.produto.find()
+
+ db.produto.find().explain()
+
+ db.produto.find().hint({nome: 1})
+ db.produto.find().hint("query_produto")
+
+ db.produto.find().hint({nome: 1}).explain()
+ db.produto.find().hint("query_produto").explain()
+
+ db.produto.dropIndex({nome: 1})
+ db.produto.dropIndex("query_produto")
+
+ db.produto.getIndexes()
+
+
+
+ 
