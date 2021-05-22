@@ -70,6 +70,22 @@ db.produto.find().pretty()
 
 
 
+db.createCollection('teste')
+show collections
+
+ db.teste.insertOne({usuario: "Semantix", data_acesso: new Date()})
+
+ db.teste.find({data_acesso: {$gte:  new Date("2020")}}) 
+ db.teste.find({data_acesso: {$gte:  new ISODate("2020-01-01T00:00:00Z")}})
+
+ db.teste.updateOne({usuario: "Semantix"}, {$currentDate:{data_modificacao:{$type:"timestamp"}}}) 
+ db.teste.updateOne({usuario: "Semantix"}, {$set: {data_acesso: new Timestamp()}})
+
+ db.teste.find().pretty()
+
+ db.teste.deleteOne({"_id" : ObjectId("60a979c9ce027813043323b3")})
+
+ db.teste.drop()
  
  
 
