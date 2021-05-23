@@ -106,6 +106,22 @@ db.produto.createIndex({nome: 1}, {name: "query_produto"})
 
  db.produto.getIndexes()
 
+use guimmox
+db.produto.find()
+ db.produto.find( {nome: {$regex: /cpu/} } )
+ 
+ db.produto.find( {nome: {$regex: /^hd/} }, {nome: 1, qtd: 1} )
+
+ db.produto.find( {'descricao.armazenamento': {$regex: /gb$/i} }, {nome: 1, 'descricao.armazenamento': 1} )
+
+ db.produto.find( {nome: {$regex: /mem.ria/} } )
+
+ db.produto.find( {qtd: {$regex: /[a-z]/} } )
+
+ db.produto.find( {'descricao.sistema': "Windows" } )
+
+
+
 
 
  
