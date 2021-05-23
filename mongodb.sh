@@ -121,7 +121,31 @@ db.produto.find()
  db.produto.find( {'descricao.sistema': "Windows" } )
 
 
+db.alunos.aggregate( 
 
+[{$match: {
+  "nivel": "M"
+}}, {$group: {
+  _id: "$id_curso",
+  m_ultimo_ano: {
+    $max: "$ano_ingresso"
+  }
+}}, {$sort: {
+  m_ultimo_ano: -1
+}}, {$limit: 5}]
 
+)
 
- 
+db.alunos.aggregate(
+[{$lookup: {
+  from: 'cursos',
+  localField: 'id_curso',
+  foreignField: 'id_curso',
+  as: 'cursos_aluno'
+}}, {$project: {
+  "id_discent": 1, "nivel": 1,
+  "cursos_aluno.id_curso": 1,
+  "cursos_aluno.id_unidade": 1,
+  "cursos_aluno.nome": 1
+}}]
+)
