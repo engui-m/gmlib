@@ -120,3 +120,33 @@ del usuario:100
 
  hdel usuario:100 estado
 
+
+subscribe noticias:sp
+
+ publish noticias:sp 'Msg 1'
+ publish noticias:sp 'Msg 2'
+ publish noticias:sp 'Msg 3'
+
+ unsubscribe noticas:sp
+
+ psubscribe noticias:*
+
+ publish noticias:rj 'Msg 4'
+ publish noticias:rj 'Msg 5'
+ publish noticias:rj 'Msg 6'
+
+
+config get *
+ config get appendonly
+
+ config set appendonly no
+
+ config get save #"3600 1 300 100 60 10000"
+
+ config set save '120 500'
+
+ config get maxmemory*
+
+ config set maxmemory 1mb
+
+ config set maxmemory-policy allkeys-lru
