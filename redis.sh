@@ -74,7 +74,7 @@ del pesquisa:produto
 
  sdiff pesquisa:produto pesquisa:desconto
 
- sunionstore pesquisa:produto_desconto pesquisa:produto pesquisa:desconto
+ sunion pesquisa:produto_desconto pesquisa:produto pesquisa:desconto
 
  smembers pesquisa:produto_desconto
 
