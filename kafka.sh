@@ -55,8 +55,17 @@ select * from usuario_csv;
 
 ksql-datagen bootstrap-server=broker:29092 schemaRegistryUrl=schema-registry:8081 quickstart=users topic=users
 
-print orders;
+print users;
 
 CREATE STREAM users_raw () WITH (KAFKA_TOPIC='users', VALUE_FORMAT='JSON’, key='userid' timestamp='viewtime')
 
 select * from users_raw
+
+
+ksql-datagen bootstrap-server=broker:29092 schemaRegistryUrl=schema-registry:8081 quickstart=pageviews topic=pageviews
+
+print pageviews;
+
+CREATE STREAM pageviews_raw () WITH (KAFKA_TOPIC='pageviews', VALUE_FORMAT='JSON’, key='pageviewsid' timestamp='viewtime')
+
+select * from pageviews_raw
