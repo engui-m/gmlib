@@ -38,3 +38,17 @@ kafka-consumer-groups --bootstrap-server localhost:9092 --group app-cli \
 kafka-consumer-groups --bootstrap-server localhost:9092 --describe --group app-cli
 
 kafka-consumer-groups bootstrap-server localhost:9092 --list
+
+
+kafka-topics --bootstrap-server localhost:9092 --topic msg-usuario-csv --create --partitions 2 --replication-factor 1
+
+kafka-console-producer --broker-list localhost:9092 --topic msg-usuario-csv
+
+docker exec –it ksqldb-cli bash | kskl
+
+create stream usuario_csv (id varchar, nome varchar) with (Kafka_topic=‘msg-usuario-csv’, value_format=‘delimited’);
+
+select * from usuario_csv;
+
+select * from usuario_csv;
+
