@@ -1,0 +1,13 @@
+[
+    {
+        "nome": "Rodrigo",
+        "cidade": "São José dos Campos",
+        "data_cadastro": "2020-08-10T00:00:00.000Z"
+    },
+
+    {
+        "nome": "João",
+        "cidade": "São Paulo",
+        "data_cadastro": "2020-08-05T00:00:00.000Z"
+    }
+]
