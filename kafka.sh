@@ -68,4 +68,23 @@ print pageviews;
 
 CREATE STREAM pageviews_raw () WITH (KAFKA_TOPIC='pageviews', VALUE_FORMAT='JSON’, key='pageviewsid' timestamp='viewtime')
 
-select * from pageviews_raw
+select * from pageviews_raw;
+
+
+docker exec –it schema-registry bash
+
+print users;
+
+kafka-avro-console-producer --broker-list broker:29092 --topic users-avro --property schema.registry.url=http://localhost:8081 --property value.schema='{"type":"record","name":"myrecord","fields":[ {"name":"id","type":“int"}, {"name":"user","type":"string"}]}’
+
+kafka-avro-console-consumer --topic users-avro --bootstrap-server broker:29092 --property schema.registry.url=http://localhost:8081 --from-beginning
+
+print users-avro; select * from users-avro;
+
+create stream users-avro1 with (kafka_topic='users-avro', value_format='avro’);
+
+sudo kafka-avro-console-producer --broker-list localhost:9092 --topic users-avro --property schema.registry.url=http://localhost:8081 --property value.schema='{"type":"record","name":"myrecord", "fields":[ {"name":"id","type":"int"}, {"user":"nome","type":"string"},{"name":"unit","type":"int", "default":"1"}]}’
+
+kafka-avro-console-consumer --topic users-avro --bootstrap-server broker:29092 --property schema.registry.url=http://localhost:8081 --from-beginning
+
+print users-avro; select * from users-avro;
